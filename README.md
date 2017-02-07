@@ -13,7 +13,7 @@ To use the module, you first need to inject the extension into
 your component. You do this via the `enableUniqueIds` function
 (which is the only function exposed by this module). Then you
 can use `this.nextUniqueId()` to get a new identifier,
-`this.getLastUniqueId()` to refer to that identifier again in the HTML,
+`this.lastUniqueId()` to refer to that identifier again in the HTML,
 and `this.getUniqueId('name')` to get an identifier by name.
 
     class MyComponent {
@@ -66,9 +66,24 @@ unique IDs per instance of every component.
 ### enableUniqueIds(component)
 
 This should be called from the constructor of the component that needs unique IDs,
-passing `this` as the parameter. This either add a `componentWillUpdate` handler
-to the current component, or wrap the existing one. This is necessary to reset
-the ID counter every time the component re-renders.
+passing `this` as the parameter. After calling this you can use `nextUniqueId`, `lastUniqueId` and `getUniqueId` by invoking them on `this`.
+
+This call either adds a `componentWillUpdate` handler to the current component,
+or wraps the existing one. The package uses `componentWillUpdate` to reset the
+ID counter every time the component re-renders.
+
+    class MyComponent {
+        constructor() {
+            super()
+
+            // Enable Unique ID support for this class
+            enableUniqueIds(this)
+        }
+
+        render() {
+            // ...
+        }
+    }
 
 ### Component.nextUniqueId()
 
@@ -82,16 +97,21 @@ not remove calls to the function between renders.
     render() {
         var manyFields = ['firstName', 'lastName', 'address', 'postalCode', 'city']
         
-        return manyFields.map((field, index) => {
-            return (
-                <div className="form-group" key={index}>
-                    <label htmlFor={this.nextUniqueId()}>Name</label>
-                    <input id={this.lastUniqueId()}
-                           type="text"
-                           className="control" />
-                </div>
-            )
-        })
+        // Every label-input pair will have a unique ID 
+        return (
+            <form>
+                {manyFields.map((field, index) => {
+                    return (
+                        <div className="form-group" key={index}>
+                            <label htmlFor={this.nextUniqueId()}>Name</label>
+                            <input id={this.lastUniqueId()}
+                                type="text"
+                                className="control" />
+                        </div>
+                    )
+                })
+            </form>
+        )
     }
 
 ### Component.lastUniqueId()
@@ -106,22 +126,21 @@ This always returns the same unique identifier, given the same name.
 This is useful if the order of components makes it impossible or confusing 
 to use `lastUniqueId` to refer to a component.
 
-        return manyFields.map((field, index) => {
-            return (
-                <div className="form-group" key={index}>
-                    <label htmlFor={this.getUniqueId('input')}>Name</label>
-                    <div className="help-block"
-                         id={this.getLastUniqueId('help')}>
-                        This should be your full name.
-                    </div>
-                    <input id={this.getUniqueId('input')}
-                           type="text"
-                           aria-describedby={this.getLastUniqueId('help')}
-                           className="control" />
-                    <div className="helpBlock"
+    render() {
+        return (
+            <div className="form-group" key={index}>
+                <label htmlFor={this.getUniqueId('input')}>Name</label>
+                <div className="help-block"
+                        id={this.getUniqueId('help')}>
+                    This should be your full name.
                 </div>
-            )
-        })
+                <input id={this.getUniqueId('input')}
+                        type="text"
+                        aria-describedby={this.getUniqueId('help')}
+                        className="control" />
+            </div>
+        )
+    }
 
 You can of course also store the result of `nextUniqueId` into a variable
 to acheive the same result.
