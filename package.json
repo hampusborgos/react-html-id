@@ -1,6 +1,6 @@
 {
   "name": "react-unique-id",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A utility package that provides consistent unique html IDs for react components.",
   "main": "index.js",
   "scripts": {

@@ -10,7 +10,7 @@ function injectUniqueness(component) {
         console.log("Reset unique counter!")
 
         if (typeof willUpdate != 'undefined') {
-            willUpdate(nextProps, nextState)
+            willUpdate.apply(component, nextProps, nextState)
         }
     }
 
