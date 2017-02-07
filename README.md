@@ -147,4 +147,4 @@ to acheive the same result.
 
 ## Credits
 
-Made by [https://hjnilsson.com](Hampus Nilsson).
+This simple extension is brough to you by [Hampus Nilsson](https://hjnilsson.com).
