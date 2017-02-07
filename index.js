@@ -4,11 +4,10 @@ function injectUniqueness(component) {
     var willUpdate = component.componentWillUpdate
     var _htmlIds = {}
     var _uniqueIdCounter = 0
+    var _uniqueInstance = ++_globallyUniqueIdCounter
 
     component.componentWillUpdate = function(nextProps, nextState) {
         _uniqueIdCounter = 0
-        console.log("Reset unique counter!")
-
         if (typeof willUpdate != 'undefined') {
             willUpdate.apply(component, nextProps, nextState)
         }
@@ -16,11 +15,11 @@ function injectUniqueness(component) {
 
     component.nextUniqueId = function() {
         var id = ++_uniqueIdCounter
-        return 'id-' + _uniqueIdCounter
+        return 'id-' + _uniqueInstance + '-' + _uniqueIdCounter
     }
 
     component.lastUniqueId = function() {
-        return 'id-' + _uniqueIdCounter
+        return 'id-' + _uniqueInstance + '-' + _uniqueIdCounter
     }
 
     component.getUniqueId = function(identifier) {
@@ -30,8 +29,7 @@ function injectUniqueness(component) {
         }
 
         if (!_htmlIds[identifier]) {
-            var globallyUnique = ++_globallyUniqueIdCounter
-            _htmlIds[identifier] = 'id-' + identifier + '-' + globallyUnique
+            _htmlIds[identifier] = 'id-' + _uniqueInstance + '-' + identifier
         }
 
         return _htmlIds[identifier]
