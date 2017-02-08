@@ -1,11 +1,19 @@
+/* Copyright (c) 2017 Hampus Joakim Nilsson
+ * Licensed via the MIT license.
+ **/
+
+// Unique counter per COMPONENT that uniqueness is added to
 var _globallyUniqueIdCounter = 0
 
 function injectUniqueness(component) {
+
+    // Store all state in the closure for the member functions
     var willUpdate = component.componentWillUpdate
     var _htmlIds = {}
     var _uniqueIdCounter = 0
     var _uniqueInstance = ++_globallyUniqueIdCounter
 
+    // Inject the following functions into the component
     component.componentWillUpdate = function(nextProps, nextState) {
         _uniqueIdCounter = 0
         if (typeof willUpdate != 'undefined') {
@@ -24,7 +32,7 @@ function injectUniqueness(component) {
 
     component.getUniqueId = function(identifier) {
         if (typeof identifier !== 'string') {
-            console.log('Warning: Expected string identiifer passed to `getUniqueId`')
+            console.log('Warning: Expected string identifer passed to `getUniqueId`')
             identifier = '' + identifier
         }
 

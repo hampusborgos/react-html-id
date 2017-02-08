@@ -128,7 +128,7 @@ to use `lastUniqueId` to refer to a component.
 
     render() {
         return (
-            <div className="form-group" key={index}>
+            <div className="form-group">
                 <label htmlFor={this.getUniqueId('input')}>Name</label>
                 <div className="help-block"
                         id={this.getUniqueId('help')}>

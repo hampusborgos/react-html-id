@@ -1,6 +1,6 @@
 {
-  "name": "react-unique-id",
-  "version": "0.1.3",
+  "name": "react-html-id",
+  "version": "0.1.0",
   "description": "A utility package that provides consistent unique html IDs for react components.",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hjnilsson/react-unique-id.git"
+    "url": "git+https://github.com/hjnilsson/react-html-id.git"
   },
   "keywords": [
     "react",
@@ -21,7 +21,7 @@
   "author": "Hampus Nilsson",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hjnilsson/react-unique-id/issues"
+    "url": "https://github.com/hjnilsson/react-html-id/issues"
   },
-  "homepage": "https://github.com/hjnilsson/react-unique-id#readme"
+  "homepage": "https://github.com/hjnilsson/react-html-id#readme"
 }
