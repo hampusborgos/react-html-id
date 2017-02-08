@@ -1,4 +1,4 @@
-# react-unique-id
+# react-html-id
 A npm package that allows you to use unique html IDs for components.
 
 ## Purpose
@@ -60,6 +60,23 @@ that the *IDs will not be unique between different instance*.
 If you put two instances of `BadComponent` in your React application,
 they will both share the same IDs! This package ensures you will get
 unique IDs per instance of every component.
+
+### Does this work with server side rendering?
+
+If you render your UI on the server in it's own process per request, you
+do not need to anything extra, because the result of rendering will be
+identical across the server and the client.
+
+However, if you render multiple different React components on the server
+using `renderToString`, you need to reset the unique ID counter between
+each request to result in the same IDs being generated for the client,
+you do this using the `resetUniqueIds()` API.
+
+This only works on first-site load. If you request dynamic DOM from
+the server that is placed on the page and then mounted, this library
+will be insufficient to solve your problem. There is no simple way
+of guaranteeing that the ID counter is consistent between the server
+and the client.
 
 ## API
 
@@ -145,6 +162,17 @@ to use `lastUniqueId` to refer to a component.
 You can of course also store the result of `nextUniqueId` into a variable
 to acheive the same result.
 
+### resetUniqueIds()
+
+This resets the per-component counter of unique IDs. Call this before using
+`renderToString` on the **server**. This should *never* be called on the client.
+
+    // Call before renderToString to reset the global ID counter
+    function renderAppServerSide(appProps) {
+        ReactHtmlId.resetUniqueIds()
+        ReactDOM.renderToString(<App props={...} />);
+    }
+
 ## Credits
 
-This simple extension is brough to you by [Hampus Nilsson](https://hjnilsson.com).
+This package is brought to you by [Hampus Nilsson](https://hjnilsson.com).

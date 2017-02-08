@@ -5,6 +5,10 @@
 // Unique counter per COMPONENT that uniqueness is added to
 var _globallyUniqueIdCounter = 0
 
+function resetUniqueIds() {
+    _globallyUniqueIdCounter = 0
+}
+
 function injectUniqueness(component) {
 
     // Store all state in the closure for the member functions
@@ -45,5 +49,6 @@ function injectUniqueness(component) {
 }
 
 module.exports = {
-    enableUniqueIds: injectUniqueness
+    resetUniqueIds, resetUniqueIds,
+    enableUniqueIds: injectUniqueness,
 }
