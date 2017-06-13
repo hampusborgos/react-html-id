@@ -1,5 +1,7 @@
 # react-html-id
-A npm package that allows you to use unique html IDs for components.
+A npm package that allows you to use unique html IDs for components
+without any dependencies on other libraries (obviously, you need to
+use React in your project).
 
 ## Purpose
 
