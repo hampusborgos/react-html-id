@@ -1,6 +1,6 @@
 {
   "name": "react-html-id",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A utility package that provides consistent unique html IDs for react components. This package has no dependencies.",
   "main": "index.js",
   "scripts": {
