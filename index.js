@@ -12,7 +12,7 @@ function resetUniqueIds() {
 function injectUniqueness(component) {
 
     // Store all state in the closure for the member functions
-    var willUpdate = component.componentWillUpdate
+    var _willUpdate = component.componentWillUpdate
     var _htmlIds = {}
     var _uniqueIdCounter = 0
     var _uniqueInstance = ++_globallyUniqueIdCounter
@@ -20,13 +20,13 @@ function injectUniqueness(component) {
     // Inject the following functions into the component
     component.componentWillUpdate = function(nextProps, nextState) {
         _uniqueIdCounter = 0
-        if (typeof willUpdate != 'undefined') {
-            willUpdate.apply(component, nextProps, nextState)
+        if (typeof _willUpdate != 'undefined') {
+            _willUpdate.apply(component, nextProps, nextState)
         }
     }
 
     component.nextUniqueId = function() {
-        var id = ++_uniqueIdCounter
+        ++_uniqueIdCounter
         return 'id-' + _uniqueInstance + '-' + _uniqueIdCounter
     }
 
@@ -49,6 +49,6 @@ function injectUniqueness(component) {
 }
 
 module.exports = {
-    resetUniqueIds, resetUniqueIds,
+    resetUniqueIds: resetUniqueIds,
     enableUniqueIds: injectUniqueness,
 }
