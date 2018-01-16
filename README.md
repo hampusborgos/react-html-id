@@ -82,10 +82,11 @@ and the client.
 
 ## API
 
-### enableUniqueIds(component)
+### enableUniqueIds(component, [instanceId])
 
 This should be called from the constructor of the component that needs unique IDs,
-passing `this` as the parameter. After calling this you can use `nextUniqueId`, `lastUniqueId` and `getUniqueId` by invoking them on `this`.
+passing `this` as the first parameter. After calling this you can use `nextUniqueId`, `lastUniqueId` and `getUniqueId`
+by invoking them on `this`.
 
 This call either adds a `componentWillUpdate` handler to the current component,
 or wraps the existing one. The package uses `componentWillUpdate` to reset the
@@ -103,6 +104,15 @@ ID counter every time the component re-renders.
             // ...
         }
     }
+
+The second optional `instanceId` parameter specifies a string to use for _all_ instances of this component when
+constructing unique IDs, as opposed to using a unique string for each instance. While this essentially defeats the
+purpose of this module when there are multiple instances of your component on the page, it's useful for snapshot-based
+unit testing, e.g. [Storyshots](https://github.com/storybooks/storybook/tree/master/addons/storyshots), where the
+indeterminate nature of test execution order might generaate different unique IDs on each test run. In this case, you'll
+likely want want to only use it when you're actually running the unit tests:
+
+    enableUniqueIds(this, (process.env.NODE_ENV === 'test') ? props.name : undefined)
 
 ### Component.nextUniqueId()
 
