@@ -18,11 +18,13 @@ can use `this.nextUniqueId()` to get a new identifier,
 `this.lastUniqueId()` to refer to that identifier again in the HTML,
 and `this.getUniqueId('name')` to get an identifier by name.
 
+    import uniqueId from 'react-html-id';
+    
     class MyComponent {
         constructor() {
             super()
 
-            enableUniqueIds(this)
+            uniqueId.enableUniqueIds(this)
         }
 
         render () {
