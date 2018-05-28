@@ -43,7 +43,7 @@ and `this.getUniqueId('name')` to get an identifier by name.
 ### Why can't I just use a counter?
 
 The problem with using a local counter in the render function is
-that the *IDs will not be unique between different instance*.
+that the *IDs will not be unique between different instances*.
 
     class BadComponent {
         render () {
@@ -77,7 +77,7 @@ need to reset the unique ID counter between each request to result in the
 same IDs being generated for the client every time. You can do this using
 the `resetUniqueIds()` API.
 
-The easiest way to do this for Next.js is to create a compent like this:
+The easiest way to do this for Next.js is to create a component like this:
 
     // PageWithUniqueIds.jsx
     import { resetUniqueIds } from "react-html-id";
@@ -99,20 +99,20 @@ The easiest way to do this for Next.js is to create a compent like this:
                 <PageWithUniqueIds>
                     {/* Your application code as usual */}
                 </PageWithUniqueIds>
-            )
+            );
         }
     }
 
 Wrap ALL pages you create with this component. Because this component will
-be rendered for every page, componentWillMount will be called both server-and
-client side once per page and reset the ID counter before the page is rendered.
-This will result in the same IDs being used both server side and client side.
+be rendered for every page, componentWillMount will be called once for both server and
+client per page. This will reset the ID counter before the page is rendered.
+The result is that the same IDs will be used both server side and client side.
 
-This strategy will only work if you request dynamic DOM from
-the server that is placed on the page and then mounted, this library
-will be insufficient to solve your problem. There is no simple way
-of guaranteeing that the ID counter is consistent between the server
-and the client.
+This strategy will only work if you render entire pages server side. If you render
+individual components, this library will be insufficient to solve your problem.
+There is no simple way of guaranteeing that the ID counter is consistent between
+server and client in that situation, without storing the information in the DOM
+for those nodes.
 
 ## API
 
@@ -143,7 +143,7 @@ The second optional `instanceId` parameter specifies a string to use for _all_ i
 constructing unique IDs, as opposed to using a unique string for each instance. While this essentially defeats the
 purpose of this module when there are multiple instances of your component on the page, it's useful for snapshot-based
 unit testing, e.g. [Storyshots](https://github.com/storybooks/storybook/tree/master/addons/storyshots), where the
-indeterminate nature of test execution order might generaate different unique IDs on each test run. In this case, you'll
+indeterminate nature of test execution order might generate different unique IDs on each test run. In this case, you'll
 likely want want to only use it when you're actually running the unit tests:
 
     enableUniqueIds(this, (process.env.NODE_ENV === 'test') ? props.name : undefined)
@@ -211,7 +211,8 @@ to acheive the same result.
 ### resetUniqueIds()
 
 This resets the per-component counter of unique IDs. Call this before using
-`renderToString` on the **server**. This should *never* be called on the client.
+`renderToString` on the **server**. If you call this on the client, make
+sure to only do so **once** per page render.
 
     // Call before renderToString to reset the global ID counter
     function renderAppServerSide(appProps) {
