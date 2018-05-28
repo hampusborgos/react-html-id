@@ -70,11 +70,43 @@ do not need to anything extra, because the result of rendering will be
 identical across the server and the client.
 
 However, if you render multiple different React components on the server
-using `renderToString`, you need to reset the unique ID counter between
-each request to result in the same IDs being generated for the client,
-you do this using the `resetUniqueIds()` API.
+using `renderToString` (this is what a framework like Next.js does) you
+need to reset the unique ID counter between each request to result in the
+same IDs being generated for the client every time. You can do this using
+the `resetUniqueIds()` API.
 
-This only works on first-site load. If you request dynamic DOM from
+The easiest way to do this for Next.js is to create a compent like this:
+
+    // PageWithUniqueIds.jsx
+    import { resetUniqueIds } from "react-html-id";
+
+    class PageWithUniqueIds extends React.Component {
+        componentWillMount() {
+            resetUniqueIds()
+        }
+
+        render() {
+            return this.props.children;
+        }
+    }
+
+    // index.jsx
+    class IndexPage extends React.Component {
+        render() {
+            return (
+                <PageWithUniqueIds>
+                    {/* Your application code as usual */}
+                </PageWithUniqueIds>
+            )
+        }
+    }
+
+Wrap ALL pages you create with this component. Because this component will
+be rendered for every page, componentWillMount will be called both server-and
+client side once per page and reset the ID counter before the page is rendered.
+This will result in the same IDs being used both server side and client side.
+
+This strategy will only work if you request dynamic DOM from
 the server that is placed on the page and then mounted, this library
 will be insufficient to solve your problem. There is no simple way
 of guaranteeing that the ID counter is consistent between the server
