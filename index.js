@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 Hampus Joakim Nilsson
+/* Copyright (c) 2018 Hampus Joakim Nilsson
  * Licensed via the MIT license.
  **/
 
@@ -21,29 +21,27 @@ function injectUniqueness(component) {
     }
 
     // Store all state in the closure for the member functions
-    var _willUpdate = component.componentWillUpdate
+    var _render = component.render
     var _htmlIds = {}
     var _uniqueIdCounter = 0
     var _uniqueInstance = instanceId || ++_globallyUniqueIdCounter
 
     // Inject the following functions into the component
-    component.componentWillUpdate = function(nextProps, nextState) {
+    component.render = function () {
         _uniqueIdCounter = 0
-        if (typeof _willUpdate != 'undefined') {
-            _willUpdate.apply(component, nextProps, nextState)
-        }
+        return _render.apply(component)
     }
 
-    component.nextUniqueId = function() {
+    component.nextUniqueId = function () {
         ++_uniqueIdCounter
         return 'id-' + _uniqueInstance + '-' + _uniqueIdCounter
     }
 
-    component.lastUniqueId = function() {
+    component.lastUniqueId = function () {
         return 'id-' + _uniqueInstance + '-' + _uniqueIdCounter
     }
 
-    component.getUniqueId = function(identifier) {
+    component.getUniqueId = function (identifier) {
         if (typeof identifier !== 'string') {
             console.log('Warning: Expected string identifer passed to `getUniqueId`')
             identifier = '' + identifier
